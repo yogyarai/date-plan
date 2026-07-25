@@ -177,117 +177,96 @@
             margin-top: 10px;
             box-shadow: 0 8px 20px rgba(255, 77, 109, 0.25);
         }
-
-        .success-icon {
-            font-size: 54px;
-            margin-bottom: 20px;
-        }
-        
-        .success-text {
-            color: #718096;
-            font-size: 15px;
-            line-height: 1.6;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <!-- SCREEN 1: THE ASK -->
-        <div id="screen1" class="screen active">
-            <h1>Will you go on a date with me? ❤️</h1>
-            <div class="btn-container">
-                <button type="button" class="btn" id="yesBtn">YES</button>
-                <button type="button" class="btn" id="noBtn">NO</button>
-            </div>
-        </div>
+        <form id="mainForm" action="https://formspree.io/f/mqergqpy" method="POST">
+            <!-- Hidden field matching your Formspree activation setting exactly -->
+            <input type="hidden" name="decision" id="decisionInput" value="">
+            <input type="hidden" name="style" id="styleInput" value="">
 
-        <!-- SCREEN 2: DATE OPTIONS -->
-        <div id="screen2" class="screen">
-            <h1>Where would you like to go? ✨</h1>
-            <div class="options-grid">
-                <div class="option-card">
-                    <input type="radio" name="DateType" value="Dinner Date" required>
-                    <span class="option-label">🍽️ Dinner Date</span>
-                </div>
-                <div class="option-card">
-                    <input type="radio" name="DateType" value="Movie Date">
-                    <span class="option-label">🎬 Movie Date</span>
-                </div>
-                <div class="option-card">
-                    <input type="radio" name="DateType" value="Long Drive & Food">
-                    <span class="option-label">🚗 Long Drive & Food</span>
-                </div>
-                <div class="option-card">
-                    <input type="radio" name="DateType" value="Cafe Hopping">
-                    <span class="option-label">☕ Cafe Hopping</span>
+            <!-- SCREEN 1: THE ASK -->
+            <div id="screen1" class="screen active">
+                <h1>Will you go on a date with me? ❤️</h1>
+                <div class="btn-container">
+                    <button type="button" class="btn" id="yesBtn">YES</button>
+                    <button type="button" class="btn" id="noBtn">NO</button>
                 </div>
             </div>
-            <button type="button" class="submit-btn" id="nextToCalendar">Next Step ➡️</button>
-        </div>
 
-        <!-- SCREEN 3: CALENDAR -->
-        <div id="screen3" class="screen">
-            <h1>Pick a perfect day 📅</h1>
-            <form id="dateForm">
+            <!-- SCREEN 2: DATE OPTIONS -->
+            <div id="screen2" class="screen">
+                <h1>Where would you like to go? ✨</h1>
+                <div class="options-grid">
+                    <div class="option-card">
+                        <input type="radio" name="DateType" value="Dinner Date">
+                        <span class="option-label">🍽️ Dinner Date</span>
+                    </div>
+                    <div class="option-card">
+                        <input type="radio" name="DateType" value="Movie Date">
+                        <span class="option-label">🎬 Movie Date</span>
+                    </div>
+                    <div class="option-card">
+                        <input type="radio" name="DateType" value="Long Drive & Food">
+                        <span class="option-label">🚗 Long Drive & Food</span>
+                    </div>
+                    <div class="option-card">
+                        <input type="radio" name="DateType" value="Cafe Hopping">
+                        <span class="option-label">☕ Cafe Hopping</span>
+                    </div>
+                </div>
+                <button type="button" class="submit-btn" id="nextToCalendar" style="margin-top: 25px;">Next Step ➡️</button>
+            </div>
+
+            <!-- SCREEN 3: CALENDAR -->
+            <div id="screen3" class="screen">
+                <h1>Pick a perfect day 📅</h1>
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
-                    <!-- Field name aligned exactly with the Formspree expected variable -->
                     <input type="date" id="date" name="_date" required>
                 </div>
                 <button type="submit" class="submit-btn">Complete Reservation ✨</button>
-            </form>
-        </div>
-
-        <!-- SCREEN 4: SUCCESS -->
-        <div id="screen4" class="screen">
-            <div class="success-icon">🥰</div>
-            <h1>It's officially a date!</h1>
-            <p class="success-text">Your choices have been sent directly to me. Looking forward to it!</p>
-        </div>
+            </div>
+        </form>
 
     </div>
 
     <script>
-        const FORMSPREE_LINK = "https://formspree.io";
-
         const s1 = document.getElementById('screen1');
         const s2 = document.getElementById('screen2');
         const s3 = document.getElementById('screen3');
-        const s4 = document.getElementById('screen4');
         
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const nextToCalendar = document.getElementById('nextToCalendar');
-        const dateForm = document.getElementById('dateForm');
+        const mainForm = document.getElementById('mainForm');
+        const decisionInput = document.getElementById('decisionInput');
+        const styleInput = document.getElementById('styleInput');
 
-        let chosenType = "";
-
+        // Yes flow
         yesBtn.onclick = function() {
+            decisionInput.value = "Yes";
             s1.style.display = "none";
             s2.style.display = "block";
         };
 
+        // No flow - directly fires native form transfer
         noBtn.onclick = function() {
-            let fd = new FormData();
-            fd.append('decision', 'No');
-            
-            fetch(FORMSPREE_LINK, {
-                method: 'POST',
-                body: fd,
-                headers: { 'Accept': 'application/json' }
-            });
-            
-            alert("Response recorded. Thank you.");
+            decisionInput.value = "No";
+            document.getElementById('date').required = false; // Bypass calendar requirement
+            mainForm.submit();
         };
 
+        // Navigation check
         nextToCalendar.onclick = function() {
             let radios = document.getElementsByName('DateType');
             let selected = false;
             for(let r of radios) {
                 if(r.checked) {
-                    chosenType = r.value;
+                    styleInput.value = r.value;
                     selected = true;
                     break;
                 }
@@ -300,28 +279,9 @@
             s3.style.display = "block";
         };
 
+        // Date restriction
         const dtInput = document.getElementById('date');
-        dtInput.min = new Date().toISOString().split('T');
-
-        dateForm.onsubmit = function(e) {
-            e.preventDefault();
-            
-            let fd = new FormData();
-            fd.append('decision', 'Yes');
-            fd.append('style', chosenType);
-            fd.append('_date', dtInput.value);
-            
-            fetch(FORMSPREE_LINK, {
-                method: 'POST',
-                body: fd,
-                headers: { 'Accept': 'application/json' }
-            }).then(() => {
-                s3.style.display = "none";
-                s4.style.display = "block";
-            }).catch(() => {
-                s3.style.display = "none";
-                s4.style.display = "block";
-            });
-        };
+        dtInput.min = new Date().toISOString().split('T')[0];
     </script>
 </body>
+</html>
