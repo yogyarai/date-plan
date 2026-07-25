@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Invitation</title>
+    <title>A Message From My Heart</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,9 +13,10 @@
         }
 
         body {
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%), 
-                        radial-gradient(circle at 10% 20%, rgba(255, 194, 209, 0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(194, 223, 255, 0.15) 0%, transparent 40%);
+            /* Vibrant, romantic pink-to-purple gradient background */
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%),
+                        radial-gradient(circle at 20% 30%, rgba(255, 77, 109, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(214, 51, 132, 0.2) 0%, transparent 50%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,28 +26,40 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            /* Glossy card with a soft pink tint border */
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 45px 30px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            box-shadow: 0 20px 40px rgba(214, 51, 132, 0.15);
             width: 100%;
             max-width: 440px;
             text-align: center;
-            min-height: 280px;
+            min-height: 320px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
         }
 
         h1 {
-            color: #2d3748;
-            margin-bottom: 30px;
-            font-size: 24px;
-            font-weight: 600;
+            color: #d63384;
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 700;
             line-height: 1.4;
+        }
+
+        /* Romantic Apology Text Styling */
+        .apology-text {
+            color: #656d78;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            padding: 0 10px;
+            font-style: italic;
         }
 
         .screen {
@@ -78,24 +91,31 @@
         .btn {
             padding: 14px 40px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 50px;
             border: none;
             cursor: pointer;
             transition: all 0.2s ease;
+            letter-spacing: 0.5px;
         }
 
+        /* Vibrant Romantic Colors for Buttons */
         #yesBtn {
-            background: #ff4d6d;
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 100%);
             color: white;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.25);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
             z-index: 5;
         }
 
+        #yesBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.5);
+        }
+
         #noBtn {
-            background: #f7fafc;
-            color: #718096;
-            border: 1px solid #e2e8f0;
+            background: #fff0f3;
+            color: #ff4d6d;
+            border: 1px solid #ffccd5;
             z-index: 10;
         }
 
@@ -106,10 +126,10 @@
 
         label {
             display: block;
-            font-weight: 600;
-            color: #4a5568;
+            font-weight: 700;
+            color: #d63384;
             margin-bottom: 12px;
-            font-size: 15px;
+            font-size: 16px;
         }
 
         .options-grid {
@@ -135,47 +155,72 @@
             display: block;
             padding: 15px 10px;
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #ffccd5;
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.25s ease;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: #4a5568;
             text-align: center;
         }
 
         .option-card input[type="radio"]:checked + .option-label {
-            background: #ff4d6d;
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 100%);
             border-color: #ff4d6d;
             color: white;
             transform: scale(1.02);
-            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.3);
         }
 
         input[type="date"] {
             width: 100%;
             padding: 14px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #ffccd5;
             border-radius: 16px;
             background: #fff;
             color: #2d3748;
             font-size: 15px;
             outline: none;
+            font-weight: 500;
+        }
+
+        input[type="date"]:focus {
+            border-color: #ff4d6d;
+            box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.2);
         }
 
         .submit-btn {
-            background: #ff4d6d;
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 100%);
             color: white;
             border: none;
             padding: 16px 40px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.25);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .heart-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.15); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -183,14 +228,15 @@
 
     <div class="container">
         
-        <form id="mainForm" action="https://formspree.io/f/mqergqpy" method="POST">
-            <!-- Hidden field matching your Formspree activation setting exactly -->
+        <form id="mainForm" action="https://formspree.io" method="POST">
             <input type="hidden" name="decision" id="decisionInput" value="">
             <input type="hidden" name="style" id="styleInput" value="">
 
-            <!-- SCREEN 1: THE ASK -->
+            <!-- SCREEN 1: THE ASK + ROMANTIC APOLOGY -->
             <div id="screen1" class="screen active">
-                <h1>Will you go on a date with me? ❤️</h1>
+                <div class="heart-icon">💖</div>
+                <h1>Will you go on a date with me?</h1>
+                <p class="apology-text">"I am incredibly sorry for everything. I never meant to hurt you, and I truly want to make things right between us. Please give me a chance to clear the air and treat you out."</p>
                 <div class="btn-container">
                     <button type="button" class="btn" id="yesBtn">YES</button>
                     <button type="button" class="btn" id="noBtn">NO</button>
@@ -199,7 +245,8 @@
 
             <!-- SCREEN 2: DATE OPTIONS -->
             <div id="screen2" class="screen">
-                <h1>Where would you like to go? ✨</h1>
+                <div class="heart-icon">✨</div>
+                <h1>Where would you like to go?</h1>
                 <div class="options-grid">
                     <div class="option-card">
                         <input type="radio" name="DateType" value="Dinner Date">
@@ -223,7 +270,8 @@
 
             <!-- SCREEN 3: CALENDAR -->
             <div id="screen3" class="screen">
-                <h1>Pick a perfect day 📅</h1>
+                <div class="heart-icon">📅</div>
+                <h1>Pick a perfect day</h1>
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
                     <input type="date" id="date" name="_date" required>
@@ -246,42 +294,13 @@
         const decisionInput = document.getElementById('decisionInput');
         const styleInput = document.getElementById('styleInput');
 
-        // Yes flow
         yesBtn.onclick = function() {
             decisionInput.value = "Yes";
             s1.style.display = "none";
             s2.style.display = "block";
         };
 
-        // No flow - directly fires native form transfer
         noBtn.onclick = function() {
             decisionInput.value = "No";
-            document.getElementById('date').required = false; // Bypass calendar requirement
-            mainForm.submit();
-        };
-
-        // Navigation check
-        nextToCalendar.onclick = function() {
-            let radios = document.getElementsByName('DateType');
-            let selected = false;
-            for(let r of radios) {
-                if(r.checked) {
-                    styleInput.value = r.value;
-                    selected = true;
-                    break;
-                }
-            }
-            if(!selected) {
-                alert("Please pick an option first! ✨");
-                return;
-            }
-            s2.style.display = "none";
-            s3.style.display = "block";
-        };
-
-        // Date restriction
-        const dtInput = document.getElementById('date');
-        dtInput.min = new Date().toISOString().split('T')[0];
-    </script>
-</body>
-</html>
+            document.getElementById('date').required = false; 
+            mainForm.submit();};nextToCalendar.onclick = function() {let radios = document.getElementsByName('DateType');let selected = false;for(let r of radios) {if(r.checked) {styleInput.value = r.value;selected = true;break;}}if(!selected) {alert("Please pick an option first! 💕");return;}s2.style.display = "none";s3.style.display = "block";};const dtInput = document.getElementById('date');dtInput.min = new Date().toISOString().split('T')[0];
