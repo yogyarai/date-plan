@@ -198,16 +198,20 @@
             margin-bottom: 10px;
             color: #ff4d6d;
         }
+
+        .success-text {
+            color: #656d78;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <form id="mainForm" action="https://formspree.io" method="POST">
-            <input type="hidden" name="decision" id="decisionInput" value="">
-            <input type="hidden" name="style" id="styleInput" value="">
-
+        <form id="dateForm">
             <!-- SCREEN 1: THE ASK -->
             <div id="screen1" class="screen active">
                 <div class="heart-icon">♥</div>
@@ -221,24 +225,16 @@
 
             <!-- SCREEN 2: DATE OPTIONS -->
             <div id="screen2" class="screen">
-                <div class="heart-icon">♦</div>
+                <div class="heart-icon">✨</div>
                 <h1>Where would you like to go?</h1>
                 <div class="options-grid">
                     <div class="option-card">
                         <input type="radio" name="DateType" value="Dinner Date">
-                        <span class="option-label">Dinner Date</span>
+                        <span class="option-label">🍽️ Dinner Date</span>
                     </div>
                     <div class="option-card">
                         <input type="radio" name="DateType" value="Movie Date">
-                        <span class="option-label">Movie Date</span>
-                    </div>
-                    <div class="option-card">
-                        <input type="radio" name="DateType" value="Long Drive & Food">
-                        <span class="option-label">Long Drive & Food</span>
-                    </div>
-                    <div class="option-card">
-                        <input type="radio" name="DateType" value="Cafe Hopping">
-                        <span class="option-label">Cafe Hopping</span>
+                        <span class="option-label">🎬 Movie Date</span>
                     </div>
                 </div>
                 <button type="button" class="submit-btn" id="nextToCalendar" style="margin-top: 25px;">Next Step ➡️</button>
@@ -246,7 +242,7 @@
 
             <!-- SCREEN 3: CALENDAR -->
             <div id="screen3" class="screen">
-                <div class="heart-icon">♣</div>
+                <div class="heart-icon">📅</div>
                 <h1>Pick a perfect day</h1>
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
@@ -254,32 +250,48 @@
                 </div>
                 <button type="submit" class="submit-btn">Complete Reservation ✨</button>
             </div>
+
+            <!-- SCREEN 4: SUCCESS MESSAGE -->
+            <div id="screen4" class="screen">
+                <div class="heart-icon">🥰</div>
+                <h1>It's officially a date!</h1>
+                <p class="success-text">The choices you chose have been sent directly to me. I can't wait to see you!</p>
+            </div>
         </form>
 
     </div>
 
     <script>
+        const FORMSPREE_LINK = "https://formspree.io";
+
         const s1 = document.getElementById('screen1');
         const s2 = document.getElementById('screen2');
         const s3 = document.getElementById('screen3');
+        const s4 = document.getElementById('screen4');
         
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const nextToCalendar = document.getElementById('nextToCalendar');
-        const mainForm = document.getElementById('mainForm');
-        const decisionInput = document.getElementById('decisionInput');
-        const styleInput = document.getElementById('styleInput');
+        const dateForm = document.getElementById('dateForm');
+
+        let chosenType = "";
 
         yesBtn.onclick = function() {
-            decisionInput.value = "Yes";
             s1.style.display = "none";
             s2.style.display = "block";
         };
 
         noBtn.onclick = function() {
-            decisionInput.value = "No";
-            document.getElementById('date').required = false; 
-            mainForm.submit();
+            let fd = new FormData();
+            fd.append('decision', 'No');
+            
+            fetch(FORMSPREE_LINK, {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            alert("Response recorded. Thank you.");
         };
 
         nextToCalendar.onclick = function() {
@@ -287,7 +299,7 @@
             let selected = false;
             for(let r of radios) {
                 if(r.checked) {
-                    styleInput.value = r.value;
+                    chosenType = r.value;
                     selected = true;
                     break;
                 }
@@ -302,7 +314,9 @@
 
         const dtInput = document.getElementById('date');
         dtInput.min = new Date().toISOString().split('T');
-    </script>
-</body>
-</html>
 
+        dateForm.onsubmit = function(e) {
+            e.preventDefault();
+            
+            let fd = new FormData();
+            fd.append('decision', 'Yes');fd.append('style', chosenType);fd.append('_date', dtInput.value);fetch(FORMSPREE_LINK, {method: 'POST',body: fd,headers: { 'Accept': 'application/json' }}).then(() => {s3.style.display = "none";s4.style.display = "block";}).catch(() => {s3.style.display = "none";s4.style.display = "block";});};
