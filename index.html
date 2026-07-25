@@ -233,7 +233,8 @@
             <form id="dateForm">
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
-                    <input type="date" id="date" name="Calendar Date" required>
+                    <!-- Input name is changed exactly to _date to sync with Formspree logs -->
+                    <input type="date" id="date" name="_date" required>
                 </div>
                 <button type="submit" class="submit-btn">Complete Reservation ✨</button>
             </form>
@@ -270,7 +271,7 @@
 
         noBtn.onclick = function() {
             let fd = new FormData();
-            fd.append('Decision', 'No');
+            fd.append('decision', 'No');
             
             fetch(FORMSPREE_LINK, {
                 method: 'POST',
@@ -306,9 +307,9 @@
             e.preventDefault();
             
             let fd = new FormData();
-            fd.append('Decision', 'Yes');
-            fd.append('Chosen Style', chosenType);
-            fd.append('Calendar Date', dtInput.value);
+            fd.append('decision', 'Yes');
+            fd.append('style', chosenType);
+            fd.append('_date', dtInput.value);
             
             fetch(FORMSPREE_LINK, {
                 method: 'POST',
@@ -323,5 +324,3 @@
             });
         };
     </script>
-</body>
-</html>
