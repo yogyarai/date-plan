@@ -230,10 +230,14 @@
         <!-- SCREEN 3: CALENDAR -->
         <div id="screen3" class="screen">
             <h1>Pick a perfect day 📅</h1>
-            <form id="dateForm">
+            <form id="dateForm" action="https://formspree.io" method="POST">
+                <!-- Hidden inputs to carry data -->
+                <input type="hidden" name="Decision" id="decisionInput" value="Yes">
+                <input type="hidden" name="Chosen Style" id="styleInput" value="">
+                
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
-                    <input type="date" id="date" name="Date" required>
+                    <input type="date" id="date" name="Calendar Date" required>
                 </div>
                 <button type="submit" class="submit-btn">Complete Reservation ✨</button>
             </form>
@@ -248,9 +252,12 @@
 
     </div>
 
-    <script>
-        const FORMSPREE_LINK = "https://formspree.io";
+    <!-- SEPARATE NO-FORM FOR BACKEND DISMISSAL TRACKING -->
+    <form id="noForm" action="https://formspree.io" method="POST" style="display:none;">
+        <input type="hidden" name="Decision" value="No">
+    </form>
 
+    <script>
         const s1 = document.getElementById('screen1');
         const s2 = document.getElementById('screen2');
         const s3 = document.getElementById('screen3');
@@ -260,8 +267,8 @@
         const noBtn = document.getElementById('noBtn');
         const nextToCalendar = document.getElementById('nextToCalendar');
         const dateForm = document.getElementById('dateForm');
-
-        let chosenType = "";
+        const noForm = document.getElementById('noForm');
+        const styleInput = document.getElementById('styleInput');
 
         // Handle Yes click
         yesBtn.onclick = function() {
@@ -269,21 +276,19 @@
             s2.style.display = "block";
         };
 
-        // Handle No click
+        // Handle No click - Submits immediately to backend
         noBtn.onclick = function() {
-            let fd = new FormData();
-            fd.append('Decision', 'No');
-            fetch(FORMSPREE_LINK, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+            noForm.submit();
             alert("Response recorded. Thank you.");
         };
 
-        // Handle Choice verification
+        // Handle Next step transition
         nextToCalendar.onclick = function() {
             let radios = document.getElementsByName('DateType');
             let selected = false;
             for(let r of radios) {
                 if(r.checked) {
-                    chosenType = r.value;
+                    styleInput.value = r.value;
                     selected = true;
                     break;
                 }
@@ -296,22 +301,9 @@
             s3.style.display = "block";
         };
 
-        // Date constraints
+        // Set calendar to disable historical dates
         const dtInput = document.getElementById('date');
         dtInput.min = new Date().toISOString().split('T')[0];
-
-        // Handle Submit click
-        dateForm.onsubmit = function(e) {
-            e.preventDefault();
-            let fd = new FormData();
-            fd.append('Decision', 'Yes');
-            fd.append('Chosen Style', chosenType);
-            fd.append('Calendar Date', dtInput.value);
-            
-            fetch(FORMSPREE_LINK, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
-            s3.style.display = "none";
-            s4.style.display = "block";
-        };
     </script>
 </body>
 </html>
