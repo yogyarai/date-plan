@@ -233,7 +233,7 @@
             <form id="dateForm">
                 <div class="form-group">
                     <label for="date">Select a day on the calendar:</label>
-                    <!-- Input name is changed exactly to _date to sync with Formspree logs -->
+                    <!-- Field name aligned exactly with the Formspree expected variable -->
                     <input type="date" id="date" name="_date" required>
                 </div>
                 <button type="submit" class="submit-btn">Complete Reservation ✨</button>
@@ -301,7 +301,7 @@
         };
 
         const dtInput = document.getElementById('date');
-        dtInput.min = new Date().toISOString().split('T')[0];
+        dtInput.min = new Date().toISOString().split('T');
 
         dateForm.onsubmit = function(e) {
             e.preventDefault();
@@ -324,3 +324,4 @@
             });
         };
     </script>
+</body>
