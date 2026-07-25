@@ -264,6 +264,7 @@
     </div>
 
     <script>
+        // REPLACE THIS URL WITH YOUR ACTUAL FORMSPREE ENDPOINT (e.g., https://formspree.io/f/your_form_id)
         const FORMSPREE_LINK = "https://formspree.io";
 
         const s1 = document.getElementById('screen1');
@@ -282,16 +283,25 @@
         // Auto-disable previous date selections
         dtInput.min = new Date().toISOString().split('T')[0];
 
+        // Screen transition helper function
+        function showScreen(screenToShow) {
+            [s1, s2, s3, s4].forEach(s => s.classList.remove('active'));
+            screenToShow.classList.add('active');
+        }
+
         // Screen 1 Button Listeners
         yesBtn.onclick = function() {
-            s1.style.display = "none";
-            s2.style.display = "block";
+            showScreen(s2);
         };
 
         noBtn.onclick = function() {
             let fd = new FormData();
             fd.append('decision', 'No');
-            fetch(FORMSPREE_LINK, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+            fetch(FORMSPREE_LINK, { 
+                method: 'POST', 
+                body: fd, 
+                headers: { 'Accept': 'application/json' } 
+            });
             alert("Response recorded. Thank you.");
         };
 
@@ -299,18 +309,43 @@
         nextToCalendar.onclick = function() {
             let rDinner = document.getElementById('radioDinner');
             let rMovie = document.getElementById('radioMovie');
-            if (rDinner.checked) { chosenType = rDinner.value; } 
-            else if (rMovie.checked) { chosenType = rMovie.value; } 
-            else { alert("Please pick an option first! 💕"); return; }
-            s2.style.display = "none";
-            s3.style.display = "block";
+            
+            if (rDinner.checked) { 
+                chosenType = rDinner.value; 
+            } else if (rMovie.checked) { 
+                chosenType = rMovie.value; 
+            } else { 
+                alert("Please pick an option first! 💕"); 
+                return; 
+            }
+            
+            showScreen(s3);
         };
 
-        // Screen 3 Final Dispatch Logic Included Securely Inside Box
+        // Screen 3 Final Dispatch Logic
         finalSubmitBtn.onclick = function() {
             if (!dtInput.value) {
                 alert("Please select a date on the calendar! 📅");
                 return;
             }
+
             let fd = new FormData();
-            fd.append('decision', 'Yes');fd.append('style', chosenType);fd.append('_date', dtInput.value);fetch(FORMSPREE_LINK, {method: 'POST',body: fd,headers: { 'Accept': 'application/json' }}).then(() => {s3.style.display = "none";s4.style.display = "block";}).catch(() => {s3.style.display = "none";s4.style.display = "block";});};
+            fd.append('decision', 'Yes');
+            fd.append('style', chosenType);
+            fd.append('_date', dtInput.value);
+
+            fetch(FORMSPREE_LINK, {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(() => {
+                showScreen(s4);
+            })
+            .catch(() => {
+                showScreen(s4);
+            });
+        };
+    </script>
+</body>
+</html>
