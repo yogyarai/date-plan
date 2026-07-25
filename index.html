@@ -264,7 +264,7 @@
     </div>
 
     <script>
-        const FORMSPREE_LINK = "https://formspree.io"; // Replace with your Formspree Endpoint URL
+        const FORMSPREE_LINK = "https://formspree.io";
 
         const s1 = document.getElementById('screen1');
         const s2 = document.getElementById('screen2');
@@ -279,21 +279,15 @@
 
         let chosenType = "";
 
-        // Disable past dates in calendar
+        // Auto-disable previous date selections
         dtInput.min = new Date().toISOString().split('T')[0];
 
-        // Helper function to switch screens cleanly
-        function showScreen(screenToShow) {
-            [s1, s2, s3, s4].forEach(s => s.classList.remove('active'));
-            screenToShow.classList.add('active');
-        }
-
-        // Screen 1: YES Button
+        // Screen 1 Button Listeners
         yesBtn.onclick = function() {
-            showScreen(s2);
+            s1.style.display = "none";
+            s2.style.display = "block";
         };
 
-        // Screen 1: NO Button
         noBtn.onclick = function() {
             let fd = new FormData();
             fd.append('decision', 'No');
@@ -301,43 +295,22 @@
             alert("Response recorded. Thank you.");
         };
 
-        // Screen 2: Next Button
+        // Screen 2 Next Listener
         nextToCalendar.onclick = function() {
             let rDinner = document.getElementById('radioDinner');
             let rMovie = document.getElementById('radioMovie');
-            
-            if (rDinner.checked) { 
-                chosenType = rDinner.value; 
-            } else if (rMovie.checked) { 
-                chosenType = rMovie.value; 
-            } else { 
-                alert("Please pick an option first! 💕"); 
-                return; 
-            }
-            
-            showScreen(s3);
+            if (rDinner.checked) { chosenType = rDinner.value; } 
+            else if (rMovie.checked) { chosenType = rMovie.value; } 
+            else { alert("Please pick an option first! 💕"); return; }
+            s2.style.display = "none";
+            s3.style.display = "block";
         };
 
-        // Screen 3: Submit Button
+        // Screen 3 Final Dispatch Logic Included Securely Inside Box
         finalSubmitBtn.onclick = function() {
             if (!dtInput.value) {
                 alert("Please select a date on the calendar! 📅");
                 return;
             }
-            
             let fd = new FormData();
-            fd.append('decision', 'Yes');
-            fd.append('style', chosenType);
-            fd.append('_date', dtInput.value);
-            
-            fetch(FORMSPREE_LINK, {
-                method: 'POST',
-                body: fd,
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(() => showScreen(s4))
-            .catch(() => showScreen(s4));
-        };
-    </script>
-</body>
-</html>
+            fd.append('decision', 'Yes');fd.append('style', chosenType);fd.append('_date', dtInput.value);fetch(FORMSPREE_LINK, {method: 'POST',body: fd,headers: { 'Accept': 'application/json' }}).then(() => {s3.style.display = "none";s4.style.display = "block";}).catch(() => {s3.style.display = "none";s4.style.display = "block";});};
