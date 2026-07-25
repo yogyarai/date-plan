@@ -193,6 +193,10 @@
             box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
         }
 
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
         .heart-icon {
             font-size: 30px;
             margin-bottom: 10px;
@@ -211,53 +215,51 @@
 
     <div class="container">
         
-        <form id="dateForm">
-            <!-- SCREEN 1: THE ASK -->
-            <div id="screen1" class="screen active">
-                <div class="heart-icon">♥</div>
-                <h1>Will you go on a date with me?</h1>
-                <p class="apology-text">"I am incredibly sorry for everything. I never meant to hurt you, and I truly want to make things right between us. Please give me a chance to clear the air and treat you out."</p>
-                <div class="btn-container">
-                    <button type="button" class="btn" id="yesBtn">YES</button>
-                    <button type="button" class="btn" id="noBtn">NO</button>
+        <!-- SCREEN 1: THE ASK -->
+        <div id="screen1" class="screen active">
+            <div class="heart-icon">♥</div>
+            <h1>Will you go on a date with me?</h1>
+            <p class="apology-text">"I am incredibly sorry for everything. I never meant to hurt you, and I truly want to make things right between us. Please give me a chance to clear the air and treat you out."</p>
+            <div class="btn-container">
+                <button type="button" class="btn" id="yesBtn">YES</button>
+                <button type="button" class="btn" id="noBtn">NO</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: DATE OPTIONS -->
+        <div id="screen2" class="screen">
+            <div class="heart-icon">✨</div>
+            <h1>Where would you like to go?</h1>
+            <div class="options-grid">
+                <div class="option-card">
+                    <input type="radio" name="DateType" value="Dinner Date" id="radioDinner">
+                    <span class="option-label">🍽️ Dinner Date</span>
+                </div>
+                <div class="option-card">
+                    <input type="radio" name="DateType" value="Movie Date" id="radioMovie">
+                    <span class="option-label">🎬 Movie Date</span>
                 </div>
             </div>
+            <button type="button" class="submit-btn" id="nextToCalendar" style="margin-top: 25px;">Next Step ➡️</button>
+        </div>
 
-            <!-- SCREEN 2: DATE OPTIONS -->
-            <div id="screen2" class="screen">
-                <div class="heart-icon">✨</div>
-                <h1>Where would you like to go?</h1>
-                <div class="options-grid">
-                    <div class="option-card">
-                        <input type="radio" name="DateType" value="Dinner Date">
-                        <span class="option-label">🍽️ Dinner Date</span>
-                    </div>
-                    <div class="option-card">
-                        <input type="radio" name="DateType" value="Movie Date">
-                        <span class="option-label">🎬 Movie Date</span>
-                    </div>
-                </div>
-                <button type="button" class="submit-btn" id="nextToCalendar" style="margin-top: 25px;">Next Step ➡️</button>
+        <!-- SCREEN 3: CALENDAR -->
+        <div id="screen3" class="screen">
+            <div class="heart-icon">📅</div>
+            <h1>Pick a perfect day</h1>
+            <div class="form-group">
+                <label for="date">Select a day on the calendar:</label>
+                <input type="date" id="date" required>
             </div>
+            <button type="button" class="submit-btn" id="finalSubmitBtn">Complete Reservation ✨</button>
+        </div>
 
-            <!-- SCREEN 3: CALENDAR -->
-            <div id="screen3" class="screen">
-                <div class="heart-icon">📅</div>
-                <h1>Pick a perfect day</h1>
-                <div class="form-group">
-                    <label for="date">Select a day on the calendar:</label>
-                    <input type="date" id="date" name="_date" required>
-                </div>
-                <button type="submit" class="submit-btn">Complete Reservation ✨</button>
-            </div>
-
-            <!-- SCREEN 4: SUCCESS MESSAGE -->
-            <div id="screen4" class="screen">
-                <div class="heart-icon">🥰</div>
-                <h1>It's officially a date!</h1>
-                <p class="success-text">The choices you chose have been sent directly to me. I can't wait to see you!</p>
-            </div>
-        </form>
+        <!-- SCREEN 4: SUCCESS MESSAGE -->
+        <div id="screen4" class="screen">
+            <div class="heart-icon">🥰</div>
+            <h1>It's officially a date!</h1>
+            <p class="success-text">The choices you chose have been sent directly to me. I can't wait to see you!</p>
+        </div>
 
     </div>
 
@@ -272,15 +274,21 @@
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const nextToCalendar = document.getElementById('nextToCalendar');
-        const dateForm = document.getElementById('dateForm');
+        const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+        const dtInput = document.getElementById('date');
 
         let chosenType = "";
 
+        // Set calendar to disable historical dates
+        dtInput.min = new Date().toISOString().split('T');
+
+        // Screen 1: Yes Button Click
         yesBtn.onclick = function() {
             s1.style.display = "none";
             s2.style.display = "block";
         };
 
+        // Screen 1: No Button Click
         noBtn.onclick = function() {
             let fd = new FormData();
             fd.append('decision', 'No');
@@ -294,29 +302,23 @@
             alert("Response recorded. Thank you.");
         };
 
+        // Screen 2: Next Button Click
         nextToCalendar.onclick = function() {
-            let radios = document.getElementsByName('DateType');
-            let selected = false;
-            for(let r of radios) {
-                if(r.checked) {
-                    chosenType = r.value;
-                    selected = true;
-                    break;
-                }
-            }
-            if(!selected) {
+            let rDinner = document.getElementById('radioDinner');
+            let rMovie = document.getElementById('radioMovie');
+            
+            if (rDinner.checked) {
+                chosenType = rDinner.value;
+            } else if (rMovie.checked) {
+                chosenType = rMovie.value;
+            } else {
                 alert("Please pick an option first! 💕");
                 return;
             }
+            
             s2.style.display = "none";
             s3.style.display = "block";
         };
 
-        const dtInput = document.getElementById('date');
-        dtInput.min = new Date().toISOString().split('T');
-
-        dateForm.onsubmit = function(e) {
-            e.preventDefault();
-            
-            let fd = new FormData();
-            fd.append('decision', 'Yes');fd.append('style', chosenType);fd.append('_date', dtInput.value);fetch(FORMSPREE_LINK, {method: 'POST',body: fd,headers: { 'Accept': 'application/json' }}).then(() => {s3.style.display = "none";s4.style.display = "block";}).catch(() => {s3.style.display = "none";s4.style.display = "block";});};
+        // Screen 3: Final Submit Button Click
+        finalSubmitBtn.onclick = function() {if (!dtInput.value) {alert("Please select a date on the calendar! 📅");return;}let fd = new FormData();fd.append('decision', 'Yes');fd.append('style', chosenType);fd.append('_date', dtInput.value);fetch(FORMSPREE_LINK, {method: 'POST',body: fd,headers: { 'Accept': 'application/json' }}).then(() => {s3.style.display = "none";s4.style.display = "block";}).catch(() => {s3.style.display = "none";s4.style.display = "block";});};
